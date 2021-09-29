@@ -1,0 +1,384 @@
+openapi: 3.0.0
+info:
+  title: LOTR API
+  version: 2.0.0
+servers:
+  - url: https://the-one-api.dev/v2
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    book:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+    chapter:
+      type: object
+      properties:
+        _id:
+          type: string
+        chapterName:
+          type: string
+    movie:
+      type: object
+      properties:
+        _id: 
+          type: string
+        name:
+          type: string
+        runtimeInMinutes:
+          type: integer
+        budgetInMillions:
+          type: integer
+        boxOfficeRevenueInMillions:
+          type: integer
+        academyAwardNominations:
+          type: integer
+        academyAwardWins:
+          type: integer
+        rottenTomatoesScore:
+          type: integer
+    character:
+      type: object
+      properties:
+        _id:
+          type: string
+        height:
+          type: string
+        race: 
+          type: string
+        gender:
+          type: string
+        birth: 
+          type: string
+        spouse:
+          type: string
+        death:
+          type: string
+        realm:
+          type: string
+        hair:
+          type: string
+        name: 
+          type: string
+        wikiUrl:
+          type: string
+          description: Link to LotR Wikia for character
+    quote:
+      type: object
+      properties:
+        _id:
+          type: string
+        dialog:
+          type: string
+          description: The quote
+        movie:
+          type: string
+          description: Movie ID
+        character:
+          type: string
+          description: Character ID
+    baseResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+        page:
+          type: integer
+        pages:
+          type: integer
+    getAllBooksResponse:
+      allOf:
+        - $ref: '#/components/schemas/baseResponse'
+      properties:
+        docs:
+          type: array
+          items: 
+            $ref: '#/components/schemas/book'
+    getBookByIdResponse:
+      allOf:
+        - $ref: '#/components/schemas/baseResponse'
+      properties:
+        docs:
+          type: array
+          items:
+            $ref: '#/components/schemas/book'
+    getChaptersOfBookByIdResponse:
+      allOf: 
+        - $ref: '#/components/schemas/baseResponse'
+      properties:
+        docs:
+          type: array
+          items:
+            $ref: '#/components/schemas/chapter'
+    getAllMoviesResponse:
+      allOf:
+        - $ref: '#/components/schemas/baseResponse'
+      properties:
+        docs:
+          type: array
+          items:
+            $ref: '#/components/schemas/movie'
+    getMovieByIdResponse:
+      allOf:
+        - $ref: '#/components/schemas/baseResponse'
+      properties:
+        docs:
+          type: array
+          items:
+            $ref: '#/components/schemas/movie'
+    getQuotesByMovieIdResponse:
+      allOf:
+        - $ref: '#/components/schemas/baseResponse'
+      properties:
+        docs:
+          type: array
+          items:
+            $ref: '#/components/schemas/quote'
+    getAllCharactersResponse:
+      allOf:
+        - $ref: '#/components/schemas/baseResponse'
+      properties:
+        docs:
+          type: array
+          items:
+            $ref: '#/components/schemas/character'
+    getCharacterByIdResponse:
+      allOf:
+        - $ref: '#/components/schemas/baseResponse'
+      properties:
+        docs:
+          type: array
+          items:
+            $ref: '#/components/schemas/character'
+    getAllQuotesByCharacterIdResponse:
+      allOf:
+        - $ref: '#/components/schemas/baseResponse'
+      properties:
+        docs:
+          type: array
+          items:
+            $ref: '#/components/schemas/quote'
+    getAllQuotesResponse:
+      allOf:
+        - $ref: '#/components/schemas/baseResponse'
+      properties:
+        docs:
+          type: array
+          items:
+            $ref: '#/components/schemas/quote'
+    getQuoteByIdResponse:
+      allOf:
+        - $ref: '#/components/schemas/baseResponse'
+      properties:
+        docs: 
+          type: array
+          items:
+            $ref: '#/components/schemas/quote'
+    getAllChaptersResponse:
+      allOf:
+        - $ref: '#/components/schemas/baseResponse'
+      properties:
+        docs:
+          type: array
+          items:
+            $ref: '#/components/schemas/chapter'
+    getChapterByIdResponse:
+      allOf:
+        - $ref: '#/components/schemas/baseResponse'
+      properties:
+        docs:
+          type: array
+          items:
+            $ref: '#/components/schemas/chapter'
+security:
+  - bearerAuth: []
+paths:
+  /book:
+    get:
+      summary: All Books
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getAllBooksResponse'
+  /book/{id}/:
+    get:
+      summary: Book By Id
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getBookByIdResponse'
+  /book/{id}/chapter:
+    get:
+      summary: Chapters of Book By Id
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getChaptersOfBookByIdResponse'
+  /movie:
+    get:
+      summary: All Movies
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getAllMoviesResponse'
+  /movie/{id}:
+    get:
+      summary: Movie by ID
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getMovieByIdResponse'
+  /movie/{id}/quote:
+    get:
+      summary: Quotes By Movie ID
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getQuotesByMovieIdResponse'
+  /character:
+    get:
+      summary: All Characters
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getAllCharactersResponse'
+  /character/{id}:
+    get:
+      summary: Character By ID
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getCharacterByIdResponse'
+  /character/{id}/quote:
+    get:
+      summary: All Quotes By Character ID
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getAllQuotesByCharacterIdResponse'
+  /quote:
+    get:
+      summary: All Quotes
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getAllQuotesResponse'
+  /quote/{id}:
+    get:
+      summary: Quote By ID
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getQuoteByIdResponse'
+  /chapter:
+    get:
+      summary: All Chapters
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getAllChaptersResponse'
+  /chapter/{id}:
+    get:
+      summary: Chapter By ID
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getChapterByIdResponse'
+
